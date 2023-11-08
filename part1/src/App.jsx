@@ -1,67 +1,65 @@
 
-const Content = (props) => {
-  console.log(props)
+const Header = (props) => {
   return (
-    <div>
-      {props.part1}
-      {props.part2}
-      {props.part3}
-
-      {props.exercises1}
-      {props.exercises2}
-      {props.exercises3}
-    </div>
+    <p>{props.course}</p>
   )
 }
 
-const Header = (props) => {
-  console.log(props)
+const Content = (props) => {
   return (
-    <>
-      <h1>{props.course}</h1>
-    </>
+    <p>{props.part1}</p>
   )
 }
 
 const Total = (props) => {
-  console.log(props)
   return (
-    <div>
-      Total Exercises : {props.exercises1 + props.exercises2 + props.exercises3}
-    </div>
-  )
+    <p>
+      {props.exercises1 + props.exercises2 + props.exercises3}
+    </p>)
 }
+// our app api
+const App = () => {
+  const course = 'Half Stack application development'
+  const parts = [
+    {
+      name: 'Fundamentals of React',
+      exercises: 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises: 7
+    },
+    {
+      name: 'State of a component',
+      exercises: 14
+    }
+  ]
+  let part1 = parts[0];
+  let part2 = parts[1];
+  let part3 = parts[2];
 
-const App = (props) => {
-  console.log(props)
-  const course = "Half Stack Development"
-  const part1 = {
-    name: 'Fundamentals of React',
-    exercises: 10
-  }
-  const part2 = {
-    name: 'Using props to pass data',
-    exercises: 7
-  }
-  const part3 = {
-    name: 'State of a component',
-    exercises: 14
-  }
+  console.log(part1.exercises + part2.exercises + part3.exercises);
+  console.log(part1)
 
   return (
     <div>
       <h1><Header course={course} /></h1>
-      <p>
-        <Content part1={part1.name} exercises1={part1.exercises} />
-      </p>
-      <p>
-        <Content part2={part2.name} exercises2={part2.exercises} />
-      </p>
-      <p>
-        <Content part3={part3.name} exercises3={part3.exercises} />
-      </p>
-      {<Total exercises1={part1.exercises} exercises2={part2.exercises} exercises3={part3.exercises} />}
+      <div>
+        <p>
+          <Content part1={part1.name} exercises1={part1.exercises} />
+        </p>
+        <p>
+          <Content part2={part2.name} exercises2={part2.exercises} />
+        </p>
+        <p>
+          <Content part3={part3.name} exercises3={part3.exercises} />
+        </p>
+        <p>
+          {<Total exercises1={part1.exercises} exercises2={part2.exercises} exercises3={part3.exercises} />}
+        </p>
+      </div>
     </div>
   )
 }
+
 export default App
