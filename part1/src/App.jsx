@@ -1,33 +1,30 @@
-import React from 'react';
-import { useState } from 'react';
+import { useState } from 'react'
 
 const App = () => {
-  // these are ok
-  const [left, setLeft] = useState(0);
-  const [right, setRight] = useState(0);
-  const [allClicks, setAll] = useState([]);
-  const [total, setTotal] = useState(0);
-
-  const LeftClick = () => {
-    setAll(allClicks.concat("L"));
-    setLeft(left + 1);
-    setTotal(left + right);
-    console.log("i am left: ",left);
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const thisGood = () => {
+    setGood(good + 1);
   }
-  const RightClick = () => {
-    setAll(allClicks.concat("R"));
-    setRight(right + 1);
-    setTotal(left + right);
-    console.log("i am right: ",right);
+  const thisBad = () => {
+    setBad(bad + 1);
+  }
+  const thisNeutral = () => {
+    setNeutral(neutral + 1);
   }
   return (
     <div>
-      <p>{RightClick} and {LeftClick}</p>
-      <p>{total}</p>
-      <button onClick={RightClick}>
-        right click here</button>
-      <button onClick={LeftClick}>
-        left click here</button>
+      <h3>Give feedbacks</h3>
+      <br></br>
+      <button onClick={thisGood}> 👍 </button>
+      <button onClick={thisBad}> 👎 </button>
+      <button onClick={thisNeutral}> 😐 </button>
+      <h3> Statistics </h3>
+      <p>Good : {good}</p>
+      <p>Bad : {bad}</p>
+      <p>Neutral : {neutral}</p>
     </div>
   )
 }
