@@ -1,111 +1,54 @@
 import { useState } from 'react'
 
-const StatisticsLines = (props) => {
-  return (
-      <tbody>
-        <tr>
-          <th>Statistics</th>
-        </tr>
-        <tr>
-          <td>Total:</td>
-          <td>{props.total}</td>
-        </tr>
-        <tr>
-          <td>Good:</td>
-          <td>{props.good}</td>
-        </tr>
-        <tr>
-          <td>Bad:</td>
-          <td>{props.bad}</td> 
-        </tr>
-        <tr>
-          <td>Neutral:</td>
-          <td>{props.neutral}</td>
-        </tr>
-        <tr>
-          <td>Average:</td>
-          <td>{props.average}</td>
-        </tr>
-      </tbody>
-  )
-}
-const Statistics = (props) => {
-  const isStatistic = props.isStatistic;
-  return (
-    <div>
-      {isStatistic ? (
-        <div className='statistics'>
-          <h1> No Feedback Given Yet! </h1>
-        </div>
-      ) : (
-        <table>
-          <StatisticsLines
-            good={props.good}
-            total={props.total}
-            bad={props.bad}
-            average={props.average}
-            neutral={props.neutral} />
-        </table>
-      )}
-
-      <table className='feedbacks'>
-      <tbody>
-        <tr>
-          <th><h3>Give feedbacks</h3></th>
-        </tr>
-        <tr>
-            <td>
-              <button onClick={props.thisGood}> 👍 </button>
-              <button onClick={props.thisBad}> 👎 </button>
-              <button onClick={props.thisNeutral}> 😐 </button>
-              </td> 
-        </tr>
-          </tbody>
-      </table>
-    </div>
-  )
-}
-
 const App = () => {
-  // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [total, setTotal] = useState(0);
-  const all = good + bad + neutral;
-  const average = total / all;
-  const isStatistic = (good + bad + neutral) == 0;
-  const thisGood = () => {
-    setGood((curr) => curr + 1);
-    setTotal(total + 1);
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
+
+
+  const [selected, setSelected] = useState(0)
+  const [max, setMax] = useState(0)
+  const [point, setPoint] = useState(new Array(anecdotes.length).fill(0))
+  const copy = [...point];
+  const thisSelect = () => {
+    setSelected(Math.floor(Math.random() * anecdotes.length));
   }
-  const thisBad = () => {
-    setBad((curr) => curr + 1);
-    setTotal(total - 1);
-  }
-  const thisNeutral = () => {
-    setNeutral((curr) => curr + 1);
-    setTotal(total + 0);
-    console.log(neutral);
+
+  const clickVote = () => {
+    copy[selected] += 1;
+    setPoint(copy);
+    if (copy[selected] > max) {
+      setMax(max + 1);
+    }
   }
 
   return (
     <div>
 
-      <div>
-        <Statistics
-          isStatistic={isStatistic}
-          good={good}
-          total={total}
-          bad={bad}
-          average={average}
-          neutral={neutral}
-          thisGood={thisGood}
-          thisBad={thisBad}
-          thisNeutral={thisNeutral} />
-      </div>
+      <h2> Anectodes Of The Day</h2>
+
+      <button onClick={thisSelect}>next anectodes</button>
+      <button onClick={clickVote}>vote</button>
+
+      <br />
+
+      <p><strong>{anecdotes[selected]} </strong>
+        <br />has {point[selected]} votes </p>
+
+      {(max == 0) ? <p>no votes given yet</p> :
+        <p> <strong>most viewed anectode: <br />
+          {anecdotes[point.indexOf(max)]}</strong></p>}
+
     </div>
   )
+
 }
 
 export default App
