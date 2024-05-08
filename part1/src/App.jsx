@@ -1,54 +1,77 @@
-import { useState } from 'react'
-
-const App = () => {
-  const anecdotes = [
-    'If it hurts, do it more often.',
-    'Adding manpower to a late software project makes it later!',
-    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-    'Premature optimization is the root of all evil.',
-    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
-    'The only way to go fast, is to go well.'
-  ]
+import { useState } from 'react';
 
 
-  const [selected, setSelected] = useState(0)
-  const [max, setMax] = useState(0)
-  const [point, setPoint] = useState(new Array(anecdotes.length).fill(0))
-  const copy = [...point];
-  const thisSelect = () => {
-    setSelected(Math.floor(Math.random() * anecdotes.length));
-  }
 
-  const clickVote = () => {
-    copy[selected] += 1;
-    setPoint(copy);
-    if (copy[selected] > max) {
-      setMax(max + 1);
-    }
-  }
-
-  return (
-    <div>
-
-      <h2> Anectodes Of The Day</h2>
-
-      <button onClick={thisSelect}>next anectodes</button>
-      <button onClick={clickVote}>vote</button>
-
-      <br />
-
-      <p><strong>{anecdotes[selected]} </strong>
-        <br />has {point[selected]} votes </p>
-
-      {(max == 0) ? <p>no votes given yet</p> :
-        <p> <strong>most viewed anectode: <br />
-          {anecdotes[point.indexOf(max)]}</strong></p>}
-
-    </div>
-  )
-
+const Square = ({ value, onSquareClick }) => {
+  return <button className="square" onClick={onSquareClick}>{value} </button>;
 }
 
+const App = () => {
+  const [squares, setSquares] = useState(Array(9).fill(null))
+  const [xIsNext, setXIsNext] = useState(true)
+  const winner = calculateWinner(squares);
+    let gameStatus;
+    if (winner) {
+      gameStatus = "Winner: " + winner;
+    } else {
+      gameStatus = "Next player is: " + (xIsNext ? 'X' : 'O');
+    }
+  function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquare = squares.slice();
+    if (xIsNext) {
+      nextSquare[i] = 'X';
+    } else {
+      nextSquare[i] = 'O';
+    }
+    
+    setSquares(nextSquare);
+    setXIsNext(!xIsNext);
+    console.log("a")
+  }
+  return (
+    <>
+      <div className="status">
+        {gameStatus}
+      </div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => { handleClick(0) }} />
+        <Square value={squares[1]} onSquareClick={() => { handleClick(1) }} />
+        <Square value={squares[2]} onSquareClick={() => { handleClick(2) }} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => { handleClick(3) }} />
+        <Square value={squares[4]} onSquareClick={() => { handleClick(4) }} />
+        <Square value={squares[5]} onSquareClick={() => { handleClick(5) }} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => { handleClick(6) }} />
+        <Square value={squares[7]} onSquareClick={() => { handleClick(7) }} />
+        <Square value={squares[8]} onSquareClick={() => { handleClick(8) }} />
+      </div>
+    </>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i]
+    if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
 export default App
